@@ -4,37 +4,38 @@ import MainLayout from "../../layouts/MainLayout.astro";
 import PokemonCard from "../../components/pokemons/PokemonCard.astro";
 import type { PokemonListResponse } from "../../interfaces/pokemon-list.response";
 import Title from "../../components/shared/title.astro";
+import { Icon } from "astro-icon/components";
 
+export const getStaticPaths = (async () => {
+  const resp = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151");
+  const { results } = (await resp.json()) as PokemonListResponse;
 
-export const getStaticPaths = (async() => {
-    const resp = await fetch('https://pokeapi.co/api/v2/pokemon?limit=151');
-    const {results} = await resp.json() as PokemonListResponse;
-   
-    return results.map(({name, url}) =>({
-        params: {name},
-        props: {name, url}
-    }));
-
+  return results.map(({ name, url }) => ({
+    params: { name },
+    props: { name, url },
+  }));
 }) satisfies GetStaticPaths;
 
-const {name}= Astro.params;
-const {url}= Astro.props;
-const id = url.split('/').at(-2);
-const audioSrc=`https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${id}.ogg`;
+const { name } = Astro.params;
+const { url } = Astro.props;
+const id = url.split("/").at(-2);
+const audioSrc = `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${id}.ogg`;
 ---
 
 <MainLayout title="algun Pokemon">
-    
-    <section class="mt-10 mx-10 flex flex-col justify-center items-center">
-        <div>
-           <button  onclick="history.back()" ="text-blue-500">Regresar</button>
-            <Title>{name}</Title>
-        </div>
+  <section class="mt-10 mx-10 flex flex-col justify-center items-center">
+    <div>
+      <button onclick="history.back()">Regresar</button>
+      <Title>{name}</Title>
+    </div>
 
-        <PokemonCard name = {name} url={url} isBig={true}/>
-        <audio controls class="mt-5">
-            <source src={audioSrc} type="audio/ogg">
-        </audio>
-    </section>
+    <button>
+      <Icon name="heart-outline" />
+    </button>
 
+    <PokemonCard name={name} url={url} isBig={true} />
+    <audio controls class="mt-5">
+      <source src={audioSrc} type="audio/ogg" />
+    </audio>
+  </section>
 </MainLayout>

@@ -3,13 +3,13 @@ const links = [
     {href: '/', text: 'Listado'},
     {href: '/pokemons/1', text:'Paginado'},
     {href: '/favorites', text: 'Favoritos'},
-]
+];
 
  const currentPath = Astro.url.pathname;
 ---
 
 <nav class="flex flex-1 items-center justify-center">
-  <div>
+  <div class="container flex items-center justify-center p-6 mx-auto text-gray-600 capitalize dark:text-gray-300">
         <!-- {
         links.map(({href, text})=> (
             <a
@@ -25,21 +25,21 @@ const links = [
 
          {
         links.map(({href, text})=> (
-            <div>
+          <div>
                 <a
           href={href}
-          class:list={[
-            'text-gray-800 dark:text-gray-200 mx-1.5 sm:mx-6',
-            {
-                'border-b-2 border-blue-500' : currentPath ===  href,
-            }
-          ]}> {text}</a>
-            </div>
-            
+          class="'text-gray-800 dark:text-gray-200 mx-1.5 sm:mx-6'"
+          > {text}</a>
+          {currentPath === href ? (
+            <div 
+            transition:name="menu-line"
+            class="border-b-2 border-blue-500 mx-2 "/>
+          ) : (
+            <div class="border-b-2 border-transparent"/>
+          )}
+          </div>
             ))
         } 
          
-        </div>     
-        
-      </>
+  </div>
 </nav>
